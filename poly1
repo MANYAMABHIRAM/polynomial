@@ -1,0 +1,166 @@
+#include <stdio.h>
+#include <stdlib.h>
+struct node
+{
+    int co, p;
+    struct node *next;
+} * temp, *temp1, *newnode, *p, *p1, *s, *n;
+typedef struct node node;
+node *create()
+{
+    int val, pow, coeff;
+    node *head = NULL;
+    node *tail = NULL;
+    do
+    {
+        printf("\nEnter power:");
+        scanf("%d", &pow);
+        printf("Enter coefficient:");
+        scanf("%d", &coeff);
+        newnode = (node *)malloc(sizeof(node));
+        newnode->p = pow;
+        newnode->co = coeff;
+        if (head == NULL)
+        {
+            head = newnode;
+            tail = newnode;
+        }
+        else
+        {
+            tail->next = newnode;
+            tail = newnode;
+        }
+        tail->next = NULL;
+        printf("Enter 1 to continue:");
+        scanf("%d", &val);
+    } while (val == 1);
+    return head;
+}
+void display(node *head)
+{
+    temp = head;
+    while (temp->next != NULL)
+    {
+        printf("%dx^%d+", temp->co, temp->p);
+        temp = temp->next;
+    }
+    printf("%dx^%d", temp->co, temp->p);
+}
+node *add(node *p, node *p1)
+{
+    n = NULL;
+    node *per;
+    per = (node *)malloc(sizeof(node));
+    per->next = NULL;
+    temp = per;
+    temp1 = p;
+    node *temp2;
+    temp2 = (node *)malloc(sizeof(node));
+    temp2 = p1;
+    while (temp1 != NULL && temp2 != NULL)
+    {
+        if (temp1->p > temp2->p)
+        {
+            per->p = temp1->p;
+            per->co = temp1->co;
+            temp1 = temp1->next;
+        }
+        else if (temp1->p < temp2->p)
+        {
+            per->p = temp2->p;
+            per->co = temp2->co;
+            temp2 = temp2->next;
+        }
+        else
+        {
+            per->p = temp1->p;
+            per->co = temp1->co + temp2->co;
+            temp1 = temp1->next;
+            temp2 = temp2->next;
+        }
+        if (temp1 && temp2)
+        {
+            per->next = (node *)malloc(sizeof(node));
+            per = per->next;
+            per->next = NULL;
+        }
+    }
+    while (temp1 != NULL || temp2 != NULL)
+    {
+        per->next = (node *)malloc(sizeof(node));
+        per = per->next;
+        per->next = NULL;
+        if (temp1)
+        {
+            per->p = temp1->p;
+            per->co = temp1->co;
+            temp1 = temp1->next;
+        }
+        else
+        {
+            per->p = temp2->p;
+            per->co = temp2->co;
+            temp2 = temp2->next;
+        }
+    }
+    return temp;
+}
+void multiply(node *p, node *p1)
+{
+    n = NULL;
+    node *per = p1;
+    temp1 = p;
+    node *temp2 = p1;
+    while (temp1)
+    {
+        node *per1 = (node *)malloc(sizeof(node));
+        per1->next = NULL;
+        while (temp2)
+        {
+            per1->co = temp1->co * temp2->co;
+            per1->p = temp1->p * temp2->p;
+            temp2 = temp2->next;
+            per1->next = (node *)malloc(sizeof(node));
+            per1 = per1->next;
+            per1->next = NULL;
+        }
+        n = add(per1, n);
+        display(n);
+        temp1 = temp1->next;
+    }
+    display(n);
+}
+int main()
+{
+    int ch;
+    while (1)
+    {
+        printf("\n1-Reading\n2-Display\n3-Addition\n4-Multiplication\nEnter your choice:");
+        scanf("%d", &ch);
+        switch (ch)
+        {
+        case 1:
+            printf("Enter data:");
+            p = create();
+            printf("Enter data:");
+            p1 = create();
+            break;
+        case 2:
+            printf("\n---------Polynomial 1 is------------\n");
+            display(p);
+            printf("\n---------Polynomial 2 is-------------\n");
+            display(p1);
+            break;
+        case 3:
+            s = add(p, p1);
+            printf("After addition:\n");
+            display(s);
+            break;
+        case 4:
+            multiply(p, p1);
+            break;
+        default:
+            exit(0);
+        }
+    }
+}
