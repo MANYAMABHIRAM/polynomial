@@ -4,7 +4,7 @@ struct node
 {
     int co, p;
     struct node *next;
-} * temp, *temp1, *newnode, *p, *p1, *s, *n;
+} * temp, *temp1, *newnode, *p, *p1, *s, *head3=NULL,*temp2,*tail,*head4=NULL;
 typedef struct node node;
 node *create()
 {
@@ -48,7 +48,6 @@ void display(node *head)
 }
 node *add(node *p, node *p1)
 {
-    n = NULL;
     node *per;
     per = (node *)malloc(sizeof(node));
     per->next = NULL;
@@ -105,30 +104,70 @@ node *add(node *p, node *p1)
     }
     return temp;
 }
-void multiply(node *p, node *p1)
+void multiply(node *head1, node *head2)
 {
-    n = NULL;
-    node *per = p1;
-    temp1 = p;
-    node *temp2 = p1;
-    while (temp1)
-    {
-        node *per1 = (node *)malloc(sizeof(node));
-        per1->next = NULL;
-        while (temp2)
-        {
-            per1->co = temp1->co * temp2->co;
-            per1->p = temp1->p * temp2->p;
-            temp2 = temp2->next;
-            per1->next = (node *)malloc(sizeof(node));
-            per1 = per1->next;
-            per1->next = NULL;
-        }
-        n = add(per1, n);
-        display(n);
-        temp1 = temp1->next;
-    }
-    display(n);
+   int value=0;
+	temp1=head1;
+	while(temp1!=NULL)
+	{
+		temp2=head2;
+		while(temp2!=NULL)
+		{
+			newnode=(struct node *)malloc(sizeof(struct node));
+			newnode->co=temp1->co*temp2->co;
+			newnode->p=temp1->p+temp2->p;
+			newnode->next=NULL;
+			if(head3==NULL)
+			{
+				head3=newnode;
+				tail=newnode;
+			}
+			else
+			{
+				tail->next=newnode;
+				tail=newnode;
+			}
+			temp2=temp2->next;
+		}
+		temp1=temp1->next;
+	}
+	temp1=head3;
+	while(temp1!=NULL)
+	{
+		temp2=temp1->next;
+		value=temp1->co;
+		while(temp2!=NULL)
+		{
+			if(temp1->p==temp2->p)
+			{
+				value=value+temp2->co;
+				temp=temp1;
+				while(temp->next!=temp2)
+				{
+					temp=temp->next;
+				}
+				temp->next=temp->next->next;
+				temp2=temp2->next;
+			}
+			temp2=temp2->next;
+		}
+			newnode=(struct node *)malloc(sizeof(struct node));
+			newnode->co=value;
+			newnode->p=temp1->p;
+			newnode->next=NULL;
+			if(head4==NULL)
+			{
+				head4=newnode;
+				tail=newnode;
+			}
+			else
+			{
+				tail->next=newnode;
+				tail=newnode;
+			}
+		temp1=temp1->next;
+	}
+		display(head4);
 }
 int main()
 {
